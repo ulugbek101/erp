@@ -3,16 +3,23 @@
       <ul class="space-y-2 font-medium">
          {% if request.user.role == 'TEACHER' %}
             <li>
-               <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+               <a href="#" class="transition active:scale-95 flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
                   <i class="material-icons">list_alt</i> 
                   <span class="ms-3">Guruhlarim</span>
                </a>
             </li>
             <li>
-               <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+               {% if account %}
+               <a href="#" class="bg-gray-100 dark:bg-gray-700 active:scale-95 flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
                   <i class="material-icons">person</i> 
                   <span class="ms-3">Profil</span>
                </a>
+               {% else %}
+               <a href="{% url 'account' %}" class="active:scale-95 flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+                  <i class="material-icons">person</i> 
+                  <span class="ms-3">Profil</span>
+               </a>
+               {% endif %} 
             </li>
          {% endif %}
        </ul>

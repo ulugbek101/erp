@@ -2,6 +2,9 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from phonenumber_field.modelfields import PhoneNumberField
+from phonenumbers import parse, format_number, PhoneNumberFormat
+
 from .managers import AdminManager, StudentManager, TeacherManager
 from .managers import UserModelManager as UserManager
 
@@ -26,6 +29,7 @@ class User(AbstractUser):
     email = models.EmailField(
         verbose_name=_("Email"), max_length=50, null=True, blank=True
     )
+    phone_number = PhoneNumberField(verbose_name=_("Phone number"), null=True, blank=True)
 
     role = models.CharField(
         verbose_name=_("Role"),
@@ -41,6 +45,10 @@ class User(AbstractUser):
     objects = UserManager()
 
     REQUIRED_FIELDS = ["first_name", "last_name"]
+
+    def get_phone_number(self):
+        parsed_number = parse(str(self.phone_number), None)
+        return format_number(parsed_number, PhoneNumberFormat.INTERNATIONAL)
 
     @property
     def fullname(self):

@@ -35,6 +35,9 @@ INSTALLED_APPS = [
 
     'app_main.apps.AppMainConfig',
     'app_users.apps.AppUsersConfig',
+
+    # For phone number field of user model
+    'phonenumber_field',
 ]
 
 MIDDLEWARE = [
