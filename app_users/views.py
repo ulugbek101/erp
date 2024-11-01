@@ -4,9 +4,12 @@ from django.contrib.auth.views import LoginView
 from django.views.generic import TemplateView
 from django.utils.translation import gettext_lazy as _
 
+from .forms import UserAuthenticationForm
+
 
 class UserLoginView(LoginView):
     template_name = 'app_users/login.html'
+    form_class = UserAuthenticationForm
     success_url = reverse_lazy('account')
     extra_context = {
         'title': _('Tizimga kirish')

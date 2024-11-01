@@ -1,11 +1,12 @@
 {% extends 'base.html' %}
 {% load i18n %}
+{% load static %}
 
 {% block content %}
-<section class="bg-gray-50 dark:bg-gray-900" style="background: url('https://i.pinimg.com/736x/97/c0/07/97c00759d90d786d9b6096d274ad3e07.jpg');">
-    <div class="flex flex-col items-end justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-
-        <div class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+<section class="h-[100vh] bg-gray-50 dark:bg-gray-900" style="background: url('https://i.pinimg.com/736x/97/c0/07/97c00759d90d786d9b6096d274ad3e07.jpg');">
+    <div class="h-[100vh] flex flex-row items-center justify-evenly px-6 py-8 mx-auto md:h-screen lg:py-0">
+        <img class="hidden lg:block w-1/2" src="{% static 'images/login.png' %}" alt="Login">
+        <div class="w-1/2 bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
             <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
                 <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                     {% trans 'Tizimga kirish' %}
