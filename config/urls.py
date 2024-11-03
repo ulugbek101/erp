@@ -1,3 +1,4 @@
+from django.shortcuts import redirect
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
@@ -7,6 +8,7 @@ from django.conf.urls.i18n import i18n_patterns
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', lambda request: redirect('account'))
 ]
 
 urlpatterns += i18n_patterns(

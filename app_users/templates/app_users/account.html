@@ -12,7 +12,9 @@
             <div class="flex flex-col items-center mb-10">
                 <img class="w-32" src="{{ request.user.profile_image.url }}" alt="{{ request.user.fullname }}" title="{{ request.user.fullname }}">   
                 <h3 class="text-white font-bold text-lg">{{ request.user.fullname }}</h3>
-                <span class="text-center text-white font-medium">{{ request.user.get_phone_number }}</span>
+                {% if request.user.phone_number %}
+                    <span class="text-center text-white font-medium">{{ request.user.get_phone_number }}</span>
+                {% endif %}
                 <span class="text-center text-white font-medium">{{ request.user.get_role_display }}</span>
             </div>
             

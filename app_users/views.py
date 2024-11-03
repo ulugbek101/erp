@@ -1,10 +1,15 @@
 from django.contrib.auth import login
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, LogoutView
+from django.core.handlers.wsgi import WSGIRequest
+from django.http import HttpResponse
 from django.shortcuts import redirect, render
+from django.template.response import TemplateResponse
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import TemplateView
+from django.contrib import messages
 
 from .forms import UserAuthenticationForm
 
@@ -19,6 +24,20 @@ class UserLoginView(LoginView):
         if request.user.is_authenticated:
             return redirect("account")
         return super().get(request, *args, **kwargs)
+
+    def form_invalid(self, form):
+        messages.error(self.request, _("Login yoki Parol noto'g'ri terildi"))
+        return super().form_invalid(form)
+
+    def get_success_url(self) -> str:
+        messages.info(self.request, f"{_('Xush kelibsiz')}, {self.request.user.fullname} 👋")
+        return super().get_success_url()
+
+
+class UserLogourView(LogoutView):
+    def post(self, request, *args, **kwargs):
+        messages.info(request, _('Tizimdan muvaffaqiyatli chiqdingiz'))
+        return super().post(request, *args, **kwargs)
 
 
 class UserAccountView(LoginRequiredMixin, TemplateView):
@@ -39,14 +58,14 @@ def update_account_password(request):
             user.set_password(password2)
             login(request, user)
             user.save()
-            # success message: Password changed
+            messages.success(request, _("Parol muvaffaqiyatli o'zgartirildi"))
             return redirect("account")
         else:
             # TODO: Pre-fill the password fields and open modal window for user
-            # error message: Passwords don't match
+            messages.error(request, _("Parollar bir xil bo'lishi shart"))
             return redirect("account")
     else:
-        # error message: Both password fields required
+        messages.error(request, _("Ikkala parol sohasi ham kerak bo'ladi"))
         return redirect("account")
 
 
@@ -57,11 +76,9 @@ def update_account_username(request):
         user = request.user
         user.username = username
         user.save()
-        # success message: Username changed
+        messages.success(request, _("Username muvaffaqiyatli o'zgartirildi"))
         return redirect("account")
     else:
         # TODO: Pre-fill the username field and open modal window for user
-        # error message: Username length should at least one
+        messages.warning(request, _("Username sohasi eng kamida 1 ta belgiga ega bo'lishi kerak"))
         return redirect("account")
-
-
