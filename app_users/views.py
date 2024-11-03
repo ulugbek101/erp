@@ -1,11 +1,7 @@
 from django.contrib.auth import login
-from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.views import LoginView, LogoutView
-from django.core.handlers.wsgi import WSGIRequest
-from django.http import HttpResponse
-from django.shortcuts import redirect, render
-from django.template.response import TemplateResponse
+from django.contrib.auth.views import LoginView, LogoutView, PasswordResetView
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import TemplateView

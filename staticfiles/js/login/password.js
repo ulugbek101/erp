@@ -1,4 +1,4 @@
-function togglePasswordVisibility(toggleIcon="toggleIcon", fieldId) {
+function togglePasswordVisibility(toggleIcon, fieldId) {
 	const passwordField = document.getElementById(fieldId);
 	const icon = document.getElementById(toggleIcon);
 

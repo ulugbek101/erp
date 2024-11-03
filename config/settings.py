@@ -154,3 +154,13 @@ AUTH_USER_MODEL = 'app_users.User'
 
 LOGIN_REDIRECT_URL = reverse_lazy('account')
 LOGOUT_REDIRECT_URL = reverse_lazy('login')
+
+
+# Email configuration
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = env.str('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env.str('EMAIL_HOST_PASSWORD')
+EMAIL_USE_SSL = False
