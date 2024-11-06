@@ -1,25 +1,20 @@
+{% load i18n %}
+
 <aside id="logo-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700" aria-label="Sidebar">
    <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
       <ul class="space-y-2 font-medium">
          {% if request.user.role == 'TEACHER' %}
             <li>
-               <a href="#" class="transition active:scale-95 flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+               <a href="{% url 'teacher-groups' %}" class="{% if groups %} bg-gray-100 dark:bg-gray-700 {% endif %} transition active:scale-95 flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
                   <i class="material-icons">list_alt</i> 
-                  <span class="ms-3">Guruhlarim</span>
+                  <span class="ms-3">{% trans 'Guruhlarim' %}</span>
                </a>
             </li>
             <li>
-               {% if account %}
-               <a href="#" class="bg-gray-100 dark:bg-gray-700 active:scale-95 flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+               <a href="{% if account %}#{% else %}{% url 'account' %}{% endif %} " class="{% if account %} bg-gray-100 dark:bg-gray-700 {% endif %} active:scale-95 flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
                   <i class="material-icons">person</i> 
-                  <span class="ms-3">Profil</span>
+                  <span class="ms-3">{% trans 'Profil' %}</span>
                </a>
-               {% else %}
-               <a href="{% url 'account' %}" class="active:scale-95 flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
-                  <i class="material-icons">person</i> 
-                  <span class="ms-3">Profil</span>
-               </a>
-               {% endif %} 
             </li>
          {% endif %}
        </ul>
