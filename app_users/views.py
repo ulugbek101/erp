@@ -30,7 +30,7 @@ class UserLoginView(LoginView):
         return super().get_success_url()
 
 
-class UserLogourView(LogoutView):
+class UserLogoutView(LogoutView):
     def post(self, request, *args, **kwargs):
         messages.info(request, _('Tizimdan muvaffaqiyatli chiqdingiz'))
         return super().post(request, *args, **kwargs)
