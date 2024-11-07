@@ -1,9 +1,8 @@
+from django.contrib.auth import get_user_model
 from django.db.models.signals import pre_delete
 from django.dispatch import receiver
-from django.contrib.auth import get_user_model
 
 from app_users.models import Group, Subject, Teacher
-
 
 User = get_user_model()
 
@@ -27,3 +26,7 @@ def set_group_name_on_group_delete(sender, instance, **kwargs):
     user = User.objects.get(student_group=instance)
     user.student_group_name = instance.name
     user.save()
+
+    for lesson in instance.lesson_set.all():
+        lesson.group_name = instance.name
+        lesson.save()

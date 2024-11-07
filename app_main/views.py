@@ -4,7 +4,7 @@ from django.db.models.query import QuerySet
 from django.shortcuts import redirect, render
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import ListView, DetailView
+from django.views.generic import DetailView, ListView
 
 from app_users.models import Group
 
@@ -26,25 +26,23 @@ class TeacherGroups(ListView):
     }
 
     def get_queryset(self) -> QuerySet[Group]:
-        self.groups_status = self.request.GET.get("group-status") or "active"
-        self.search = self.request.GET.get("search") or ""
+        self.groups_status = self.request.GET.get("group-status", "active")
+        self.search = self.request.GET.get("search", "")
 
         groups = self.request.user.group_set.filter(name__icontains=self.search)
-        print(groups)
-        print(self.groups_status)
 
         if self.groups_status == "active":
             groups = groups.filter(is_started=True)
         elif self.groups_status == "not-active":
-            groups = groups.filter(start_date__gt=timezone.now())
+            groups = groups.filter(start_date__gt=timezone.now().date())
         elif self.groups_status == "ended":
-            groups = groups.filter(end_date__lt=timezone.now())
+            groups = groups.filter(end_date__lt=timezone.now().date())
 
         return groups
 
     def get_context_data(self, **kwargs: Any) -> dict:
         context = super().get_context_data(**kwargs)
-        context["group_status"] = self.group_statuses[self.groups_status]
+        context["group_status"] = self.group_statuses.get(self.groups_status, _("Faol"))
         context["search"] = self.search
         return context
 

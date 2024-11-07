@@ -158,8 +158,8 @@ class Group(models.Model):
     is_started = models.BooleanField(
         verbose_name=_("Boshlanganlik statusi"), default=True
     )
-    start_date = models.DateTimeField(verbose_name=_("Boshlanish sanasi"))
-    end_date = models.DateTimeField(verbose_name=_("Tugash sanasi"))
+    start_date = models.DateField(verbose_name=_("Boshlanish sanasi"))
+    end_date = models.DateField(verbose_name=_("Tugash sanasi"))
     lecture_days = models.CharField(
         verbose_name=_("Dars kunlari"),
         choices=LECTURE_DAYS_CHOICES.choices,
@@ -178,11 +178,22 @@ class Group(models.Model):
 
     @property
     def has_ended(self):
-        return self.end_date < timezone.now()
+        return self.end_date < timezone.now().date()
 
     @property
     def has_not_started(self):
-        return self.start_date > timezone.now()
+        return self.start_date > timezone.now().date()
 
     def __str__(self):
         return f"{self.subject.name} {self.name}"
+
+
+class Lesson(models.Model):
+    theme = models.CharField(verbose_name=_("Mavzu"), max_length=200)
+    start_time = models.TimeField(verbose_name=_("Boshlanish vaqti"))
+    end_time = models.TimeField(verbose_name=_("Tugash vaqti"))
+    group = models.ForeignKey(to=Group, verbose_name=_("Guruh"), on_delete=models.SET_NULL, null=True)
+    group_name = models.CharField(verbose_name=_("Guruh"), max_length=100, blank=True, null=True)
+
+    def __str__(self):
+        return self.theme
