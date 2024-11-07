@@ -1,0 +1,12 @@
+{% extends 'base.html' %} 
+{% load i18n static %} 
+
+{% block content %} 
+{% include 'components/_nav.html' %} 
+{% include 'components/_aside.html' %}
+<div class="p-4 sm:ml-64">
+	<div class="p-4 rounded-lg mt-14">
+        <h1 class="dark:text-white text-2xl">{{ teacher_group }}</h1>
+    </div>
+</div>
+{% endblock content %}

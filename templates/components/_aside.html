@@ -5,7 +5,7 @@
       <ul class="space-y-2 font-medium">
          {% if request.user.role == 'TEACHER' %}
             <li>
-               <a href="{% url 'teacher-groups' %}" class="{% if groups %} bg-gray-100 dark:bg-gray-700 {% endif %} transition active:scale-95 flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+               <a href="{% url 'teacher_groups' %}" class="{% if groups %} bg-gray-100 dark:bg-gray-700 {% endif %} transition active:scale-95 flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
                   <i class="material-icons">list_alt</i> 
                   <span class="ms-3">{% trans 'Guruhlarim' %}</span>
                </a>
