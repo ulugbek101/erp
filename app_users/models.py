@@ -138,8 +138,8 @@ class Admin(User):
 
 class Group(models.Model):
     class LECTURE_DAYS_CHOICES(models.TextChoices):
-        EVEN = "even", _("Dush, Chor, Jum")
-        ODD = "odd", _("Sesh, Pay, Sha")
+        ODD = "odd", _("Dush, Chor, Jum")
+        EVEN = "even", _("Sesh, Pay, Sha")
         BOOTCAMP = "bootcamp", _("Dush, Sesh, Chor, Pay, Jum")
 
     name = models.CharField(verbose_name=_("Guruh nomi"), max_length=100)
@@ -160,6 +160,8 @@ class Group(models.Model):
     )
     start_date = models.DateField(verbose_name=_("Boshlanish sanasi"))
     end_date = models.DateField(verbose_name=_("Tugash sanasi"))
+    start_time = models.TimeField(verbose_name=_("Dars boshlanish vaqti"), null=True)
+    end_time = models.TimeField(verbose_name=_("Dars tugash vaqti"), null=True)
     lecture_days = models.CharField(
         verbose_name=_("Dars kunlari"),
         choices=LECTURE_DAYS_CHOICES.choices,
@@ -183,6 +185,10 @@ class Group(models.Model):
     @property
     def has_not_started(self):
         return self.start_date > timezone.now().date()
+    
+    @property
+    def get_lecture_time(self):
+        return f"{str(self.start_time)[:-3]} - {str(self.end_time)[:-3]}"
 
     def __str__(self):
         return f"{self.subject.name} {self.name}"
@@ -190,8 +196,6 @@ class Group(models.Model):
 
 class Lesson(models.Model):
     theme = models.CharField(verbose_name=_("Mavzu"), max_length=200)
-    start_time = models.TimeField(verbose_name=_("Boshlanish vaqti"))
-    end_time = models.TimeField(verbose_name=_("Tugash vaqti"))
     group = models.ForeignKey(to=Group, verbose_name=_("Guruh"), on_delete=models.SET_NULL, null=True)
     group_name = models.CharField(verbose_name=_("Guruh"), max_length=100, blank=True, null=True)
 
