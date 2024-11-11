@@ -28,11 +28,11 @@
                             </span>
                         {% else %}
                             {% if day.0 == teacher_group.lecture_days %}
-                                <span class="{% if today >= day.1 %} bg-green-500 bg-opacity-50 {% else %} bg-slate-300 bg-opacity-10 hover:bg-slate-500 {% endif %} text-white p-2 py-3 m-1 border border-slate-500 hover:cursor-pointer transition rounded">
+                                <span class="{% if today > day.1 %} bg-green-500 bg-opacity-50 {% elif today == day.1 %} bg-opacity-50 bg-green-500 border-green-900 {% else %} border-slate-500 bg-slate-300 bg-opacity-10 hover:bg-slate-500 {% endif %} text-white p-2 py-3 m-1 border hover:cursor-pointer transition rounded">
                                     {{ day.1 }}
                                 </span>
                             {% else %}
-                                <span class="text-white p-2 py-3 m-1 border border-slate-500 hover:cursor-pointer transition hover:bg-slate-500 rounded">
+                                <span class="{% if today == day.1 %} border-white {% else %} border-slate-500 {% endif %} text-white p-2 py-3 m-1 border hover:cursor-pointer transition hover:bg-slate-500 hover:border-slate-500 rounded">
                                     {{ day.1 }}
                                 </span>
                             {% endif %}
@@ -42,60 +42,64 @@
                 <br>
                 <div class="flex flex-col gap-4">
                     <h2 class="text-xl dark:text-white">{% trans "Dars vaqti" %}: {{ teacher_group.get_lecture_time }}</h2>
-                    <div class="flex flex-col gap-2 text-white">
-                        <label for="theme dark:text-white text-xl">{% trans "Dars mavzusi" %}:</label>
-                        <input autofocus id="theme" type="text" class="dark:bg-transparent dark:text-white focus:ring-0 rounded border border-slate-500 py-1 px-2" placeholder="">
-                    </div>
+                    <h2 class="text-xl dark:text-white">{% trans "Dars kunlari" %}: {{ teacher_group.get_lecture_days_display }}</h2>
+                    {% if is_lesson_day %}
+                        <div class="flex flex-col gap-2 text-white">
+                            <label for="theme dark:text-white text-xl">{% trans "Dars mavzusi" %}:</label>
+                            <input autofocus id="theme" type="text" class="dark:bg-transparent dark:text-white focus:ring-0 rounded border border-slate-500 py-1 px-2" placeholder="">
+                        </div>
+                    {% else %}
+                        <h1 class="dark:text-white text-xl">{% trans "Bugunga dars rejalashtirilmagan" %}</h1>
+                    {% endif %}
                 </div>
             </div>
             <div class="w-1/2 dark:text-white flex flex-col gap-5">
                 <h1 class="dark:text-white text-2xl">{{ teacher_group }}</h1>
-                {# <h1 class="dark:text-white text-xl">{% trans "Bugunga dars rejalashtirilmagan" %}</h1> #}
                 
-
-                <div class="relative overflow-x-auto shadow-md sm:rounded-lg max-h-[60vh] [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500">
-                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                            <tr>
-                                <th scope="col" class="px-6 py-3 text-start">
-                                    #
-                                </th>
-                                <th scope="col" class="px-6 py-3 text-center">
-                                    {% trans "FIO" %}
-                                </th>
-                                <th scope="col" class="px-6 py-3 text-end">
-                                    {% trans "Davomat" %}
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for student in group_students %}
-                                <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                                    <th scope="row" class="text-start px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        {{ forloop.counter }}
+                {% if is_lesson_day %}
+                    <div class="relative overflow-x-auto shadow-md sm:rounded-lg max-h-[60vh] [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500">
+                        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-start">
+                                        #
                                     </th>
-                                    <td class="px-6 py-4 text-center">
-                                        <label for="student_attendance_{{ student.id }}" class="hover:cursor-pointer">
-                                            {{ student.fullname }}
-                                        </label>
-                                    </td>
-                                    <td class="px-6 py-4 flex justify-end">
-                                        <div class="flex items-center mb-4">
-                                            <input id="student_attendance_{{ student.id }}" type="checkbox" class="text-2xl w-6 h-6 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                        </div>
-                                    </td>
+                                    <th scope="col" class="px-6 py-3 text-center">
+                                        {% trans "FIO" %}
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-end">
+                                        {% trans "Davomat" %}
+                                    </th>
                                 </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
+                            </thead>
+                            <tbody>
+                                {% for student in group_students %}
+                                    <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+                                        <th scope="row" class="text-start px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            {{ forloop.counter }}
+                                        </th>
+                                        <td class="px-6 py-4 text-center">
+                                            <label for="student_attendance_{{ student.id }}" class="hover:cursor-pointer">
+                                                {{ student.fullname }}
+                                            </label>
+                                        </td>
+                                        <td class="px-6 py-4 flex justify-end">
+                                            <div class="flex items-center mb-4">
+                                                <input id="student_attendance_{{ student.id }}" type="checkbox" class="text-2xl w-6 h-6 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
 
-                <div class="flex justify-end">
-                    <button class="transition active:scale-90 dark:hover:bg-blue-800 dark:bg-blue-600 rounded-lg dark:text-white text-center max-w-max py-2 px-6">
-                        {% trans "Davomatni saqlash" %}
-                    </button>
-                </div>
-
+                    <div class="flex justify-end">
+                        <button class="transition active:scale-90 dark:hover:bg-blue-800 dark:bg-blue-600 rounded-lg dark:text-white text-center max-w-max py-2 px-6">
+                            {% trans "Davomatni saqlash" %}
+                        </button>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>

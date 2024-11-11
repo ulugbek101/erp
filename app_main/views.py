@@ -65,6 +65,16 @@ class TeacherGroupDetail(DetailView):
         month_days = monthrange(year=year, month=month)
         days = []
 
+        group_lecture_days = self.get_object().lecture_days
+
+        if group_lecture_days == "even":
+            is_lesson_day = datetime.today().weekday() + 1 in range(2, 7, 2)
+        elif group_lecture_days == "odd":
+            is_lesson_day = datetime.today().weekday() + 1 in range(1, 6, 2)
+        elif group_lecture_days == "bootcamp":
+            is_lesson_day = datetime.today().weekday() + 1 in range(1, 6, 1)
+
+        
         for day in range(1, month_days[1] + 1):
             day_of_week = datetime(year=year, month=month, day=day).weekday() + 1
             
@@ -84,4 +94,5 @@ class TeacherGroupDetail(DetailView):
         context["days"] = days
         context["today"] = datetime.now().day
         context["group_students"] = Student.objects.filter(student_group=self.get_object())
+        context["is_lesson_day"] = is_lesson_day
         return context
